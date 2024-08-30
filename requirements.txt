@@ -1,0 +1,5 @@
+argon2-cffi
+cryptography
+sqlmodel
+typer
+rich
