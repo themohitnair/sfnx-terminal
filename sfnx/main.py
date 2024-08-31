@@ -44,7 +44,7 @@ def init():
         if verify_user_master_password(master_password_attempt):
             username = get_user_name(master_password_attempt)            
             print(f"Welcome, {username}!")
-            
+
 @app.command("addpass")
 def addpass():
     if not check_db_exists():
@@ -60,6 +60,26 @@ def addpass():
         else:
             console.print("[bold red]Error:[/bold red] Passwords do not match. Please try again.", style="bold red")
             return
+
+@app.command("delpass")
+def delpass():
+    if not check_db_exists():
+        init()
+    else:
+        service = input("Enter the name of the service: ")
+        username = input("Enter the username used for the service: ")
+        master_password_attempt = getpass.getpass("Enter your master password: ")
+        delete_password(master_password_attempt, service, username)
+
+@app.command("viewpass")
+def viewpass():
+    if not check_db_exists():
+        init()
+    else:
+        service = input("Enter the name of the service: ")
+        username = input("Enter the username used for the service: ")
+        master_password_attempt = getpass.getpass("Enter your master password: ")
+        retrieve_password(master_password_attempt, service, username)
 
 if __name__ == "__main__":
     app()

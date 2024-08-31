@@ -14,7 +14,7 @@ def init_db():
 
 class Secrets(SQLModel, table=True):
     service: str = Field(nullable=False, max_length=64, primary_key=True)
-    username: Optional[str] = Field(nullable=True, max_length=64, primary_key=True)
+    username: str = Field(nullable=False, max_length=64, primary_key=True)
     password: bytes = Field(nullable=False, max_length=255)
     salt: bytes = Field(nullable=False)
 
@@ -88,20 +88,31 @@ def get_user_name(master_password_attempt: str) -> str:
             else:
                 return ""
 
+def check_if_service_and_uname_already_exist(service: str, username: Optional[str]) -> bool:
+    with Session(engine) as session:
+        statement = select(Secrets).where(Secrets.username == username).where(Secrets.service == service)
+        result = session.exec(statement).first()
+        return result is not None
+
 def add_password(master_password_attempt: str, service: str, username: Optional[str], password: str):
     if verify_user_master_password(master_password_attempt) and not service == "sfnx_secret":
         with Session(engine) as session:
-            salt = os.urandom(16)
-            key = derive_key(master_password_attempt, salt)
-            s_password = encrypt(key, password)
-            secret = Secrets(
-                service=service,
-                username=username,
-                password=s_password,
-                salt=salt
-            )
-            session.add(secret)
-            session.commit()
+            if not check_if_service_and_uname_already_exist(service, username):
+                salt = os.urandom(16)
+                key = derive_key(master_password_attempt, salt)
+                s_password = encrypt(key, password)
+                secret = Secrets(
+                    service=service,
+                    username=username,
+                    password=s_password,
+                    salt=salt
+                )
+                session.add(secret)
+                session.commit()
+                print("Password added successfully!")
+            else:
+                print("Secrets associated with the same service and username already exist.")
+                return
 
 def delete_password(master_password_attempt: str, service: str, username: str):
     if verify_user_master_password(master_password_attempt):
@@ -111,8 +122,9 @@ def delete_password(master_password_attempt: str, service: str, username: str):
             if result:
                 session.delete(result)
                 session.commit()
+                print("Password deleted successfully!")
 
-def retrieve_password(master_password_attempt: str, service: str):
+def retrieve_password(master_password_attempt: str, service: str, username: str):
     if verify_user_master_password(master_password_attempt):
         with Session(engine) as session:
             statement = select(Secrets).where(Secrets.service == service).where(Secrets.username == username)
@@ -127,6 +139,7 @@ def retrieve_password(master_password_attempt: str, service: str):
                     except ValueError:
                         password = None
 
-                    print(f"Username: {username}, Password: {decrypted_password}")
+                    print(f"Password: {password}")
+                print("Password(s) retrieved successfully!")
             else:
                 print("No records found for this service.")
