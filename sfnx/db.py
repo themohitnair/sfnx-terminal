@@ -1,4 +1,4 @@
-from sqlmodel import SQLModel, create_engine, Session, select, Field
+from sqlmodel import SQLModel, create_engine, Session, select, Field, UniqueConstraint
 from sfnx.security import derive_key, encrypt, decrypt
 from sqlmodel import SQLModel, Field
 from typing import Optional
@@ -13,9 +13,8 @@ def init_db():
     SQLModel.metadata.create_all(engine)
 
 class Secrets(SQLModel, table=True):
-    id: Optional[int] = Field(primary_key=True, default=None, index=True)
-    service: str = Field(nullable=False, max_length=64)
-    username: Optional[str] = Field(nullable=True, max_length=64)
+    service: str = Field(nullable=False, max_length=64, primary_key=True)
+    username: Optional[str] = Field(nullable=True, max_length=64, primary_key=True)
     password: bytes = Field(nullable=False, max_length=255)
     salt: bytes = Field(nullable=False)
 
@@ -35,7 +34,7 @@ def configure(master_password: str, verification_secret: str) -> bytes:
 
 def check_exists() -> bool:
     with Session(engine) as session:
-        statement = select(Secrets).where(Secrets.id == 1).where(Secrets.service == "sfnx_secret")
+        statement = select(Secrets).where(Secrets.service == "sfnx_secret")
         result = session.exec(statement).first()
 
         return result is not None
@@ -50,7 +49,7 @@ def check_db_exists():
 
 def verify_user_master_password(master_password_attempt: str) -> bool:
     with Session(engine) as session:
-        statement = select(Secrets).where(Secrets.id == 1).where(Secrets.service == "sfnx_secret")
+        statement = select(Secrets).where(Secrets.service == "sfnx_secret")
         result = session.exec(statement).first()
 
         if result is None:
@@ -63,6 +62,7 @@ def verify_user_master_password(master_password_attempt: str) -> bool:
         try:
             decrypted_secret = decrypt(key, encrypted_secret)
         except ValueError:
+            print("Wrong master password.")
             return False
 
         return decrypted_secret == verification_secret
@@ -70,7 +70,7 @@ def verify_user_master_password(master_password_attempt: str) -> bool:
 def get_user_name(master_password_attempt: str) -> str:
     with Session(engine) as session:
         if check_exists():
-            statement = select(Secrets).where(Secrets.id == 1).where(Secrets.service == "sfnx_secret")
+            statement = select(Secrets).where(Secrets.service == "sfnx_secret")
             result = session.exec(statement).first()
             
             verification_secret = getattr(result, "username")
@@ -87,3 +87,46 @@ def get_user_name(master_password_attempt: str) -> str:
                 return decrypted_secret
             else:
                 return ""
+
+def add_password(master_password_attempt: str, service: str, username: Optional[str], password: str):
+    if verify_user_master_password(master_password_attempt) and not service == "sfnx_secret":
+        with Session(engine) as session:
+            salt = os.urandom(16)
+            key = derive_key(master_password_attempt, salt)
+            s_password = encrypt(key, password)
+            secret = Secrets(
+                service=service,
+                username=username,
+                password=s_password,
+                salt=salt
+            )
+            session.add(secret)
+            session.commit()
+
+def delete_password(master_password_attempt: str, service: str, username: str):
+    if verify_user_master_password(master_password_attempt):
+        with Session(engine) as session:
+            statement = select(Secrets).where(Secrets.service == service).where(Secrets.username == username)
+            result = session.exec(statement).first()
+            if result:
+                session.delete(result)
+                session.commit()
+
+def retrieve_password(master_password_attempt: str, service: str):
+    if verify_user_master_password(master_password_attempt):
+        with Session(engine) as session:
+            statement = select(Secrets).where(Secrets.service == service).where(Secrets.username == username)
+            results = session.exec(statement).all()
+
+            if results:
+                for result in results:
+                    username = result.username
+                    key = derive_key(master_password_attempt, result.salt)
+                    try: 
+                        password = decrypt(key, result.password)
+                    except ValueError:
+                        password = None
+
+                    print(f"Username: {username}, Password: {decrypted_password}")
+            else:
+                print("No records found for this service.")

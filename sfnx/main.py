@@ -4,7 +4,7 @@ from rich.text import Text
 from rich.panel import Panel
 import getpass
 import os
-from sfnx.db import init_db, verify_user_master_password, check_db_exists, configure, get_user_name
+from sfnx.db import init_db, verify_user_master_password, check_db_exists, configure, get_user_name, add_password, retrieve_password, delete_password
 from sfnx.security import encrypt, decrypt, derive_key
 
 app = Typer()
@@ -16,7 +16,7 @@ rules = [
         ("Rule 3:", "Your master password must have at least 15 characters. It is recommended to use a long passphrase; for example: \"myc@tn@medg@mbitst@rtedthes0vietunion@ccident@lly\""),
     ]
 
-@app.command()
+@app.command("init")
 def init():
     if not check_db_exists():
         rules_text = "\n".join([f"{rule} {point}" for rule, point in rules])
@@ -44,8 +44,22 @@ def init():
         if verify_user_master_password(master_password_attempt):
             username = get_user_name(master_password_attempt)            
             print(f"Welcome, {username}!")
+            
+@app.command("addpass")
+def addpass():
+    if not check_db_exists():
+        init()
+    else:
+        service = input("Enter the name of the service: ")
+        username = input("Enter the username used for the service: ")
+        password = getpass.getpass("Enter the password used for this service and username: ")
+        c_password = getpass.getpass("Enter the above password again for confirmation: ")
+        if password  == c_password:
+            master_password_attempt = getpass.getpass("Enter your master password: ")
+            add_password(master_password_attempt, service, username, password)
         else:
-            print("Wrong master password!")
+            console.print("[bold red]Error:[/bold red] Passwords do not match. Please try again.", style="bold red")
+            return
 
 if __name__ == "__main__":
     app()
