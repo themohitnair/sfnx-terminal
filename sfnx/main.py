@@ -3,6 +3,7 @@ from rich.console import Console
 from rich.text import Text
 from rich.panel import Panel
 import getpass
+import os
 from sfnx.db import init_db, verify_user_master_password, check_db_exists, configure, get_user_name
 from sfnx.security import encrypt, decrypt, derive_key
 
@@ -33,7 +34,8 @@ def init():
         name = input("Enter your name or alias [required]: ")    
         
         console.print(f"\nThank you for setting up sfnx, {name}!", style="bold green")
-        key = derive_key(master_password)
+        salt = os.urandom(16)
+        key = derive_key(master_password, salt)
         encrypted_secret = encrypt(key, name)
         configure(master_password, name)
     else:
@@ -42,6 +44,8 @@ def init():
         if verify_user_master_password(master_password_attempt):
             username = get_user_name(master_password_attempt)            
             print(f"Welcome, {username}!")
+        else:
+            print("Wrong master password!")
 
 if __name__ == "__main__":
     app()

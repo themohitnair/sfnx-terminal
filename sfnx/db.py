@@ -17,14 +17,17 @@ class Secrets(SQLModel, table=True):
     service: str = Field(nullable=False, max_length=64)
     username: Optional[str] = Field(nullable=True, max_length=64)
     password: bytes = Field(nullable=False, max_length=255)
+    salt: bytes = Field(nullable=False)
 
 def configure(master_password: str, verification_secret: str) -> bytes:
     init_db()
-    reference = encrypt(derive_key(master_password), verification_secret)
+    salt = os.urandom(16)
+    reference = encrypt(derive_key(master_password, salt), verification_secret)
     configuration = Secrets(
         service="sfnx_secret",
         username=verification_secret,
-        password=reference
+        password=reference,
+        salt=salt
     )
     with Session(engine) as session:
         session.add(configuration)
@@ -55,20 +58,32 @@ def verify_user_master_password(master_password_attempt: str) -> bool:
         
         encrypted_secret = getattr(result, "password")
         verification_secret = getattr(result, "username")
+        salt = getattr(result, "salt")
+        key = derive_key(master_password_attempt, salt)
+        try:
+            decrypted_secret = decrypt(key, encrypted_secret)
+        except ValueError:
+            return False
 
-        key = derive_key(master_password_attempt)
-        decrypted_secret = decrypt(key, encrypted_secret)
         return decrypted_secret == verification_secret
 
 def get_user_name(master_password_attempt: str) -> str:
     with Session(engine) as session:
-        if check_exists:
+        if check_exists():
             statement = select(Secrets).where(Secrets.id == 1).where(Secrets.service == "sfnx_secret")
             result = session.exec(statement).first()
             
             verification_secret = getattr(result, "username")
             encrypted_secret = getattr(result, "password")
+            salt = getattr(result, "salt")
+            key = derive_key(master_password_attempt, salt)
 
-            key = derive_key(master_password_attempt)
-            decrypted_secret = decrypt(key, encrypted_secret)
-            return decrypted_secret
+            try:
+                decrypted_secret = decrypt(key, encrypted_secret)
+            except ValueError:
+                return ""
+            
+            if decrypted_secret == verification_secret:
+                return decrypted_secret
+            else:
+                return ""

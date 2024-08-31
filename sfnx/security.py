@@ -1,21 +1,21 @@
 from argon2 import PasswordHasher
-from argon2 import Type
+from argon2 import Type, low_level
 from cryptography.hazmat.primitives.ciphers import Cipher, algorithms, modes
 from cryptography.hazmat.primitives import padding
 from cryptography.hazmat.backends import default_backend
 import os
 
-ph = PasswordHasher(
-    time_cost=2,
-    memory_cost=102400,
-    parallelism=8,
-    hash_len=32,
-    type=Type.ID
-)
-
-def derive_key(m_password: str) -> bytes:
-    hashed_key = ph.hash(m_password)
-    return hashed_key.encode()[:32]
+def derive_key(m_password: str, salt: bytes) -> bytes:
+    key = low_level.hash_secret_raw(
+        m_password.encode(),
+        salt,
+        time_cost=2,
+        memory_cost=102400,
+        parallelism=8,
+        hash_len=32,
+        type=Type.ID
+    )
+    return key
 
 def encrypt(key: bytes, plaintext: str) -> bytes:
     if len(key) != 32:
@@ -49,12 +49,3 @@ def decrypt(key: bytes, encrypted_data: bytes) -> str:
     plaintext = unpadder.update(padded_plaintext) + unpadder.finalize()
     
     return plaintext.decode()
-
-if __name__ == "__main__":
-    pwd = input("Enter the password to generate key: ")
-    key = derive_key(pwd)
-    secret = input("Enter the secret: ")
-    encrypted = encrypt(key, secret)
-    print(f"Encrypted data (in bytes): {encrypted}")
-    decrypted = decrypt(key, encrypted)
-    print(f"Decrypted data: {decrypted}")
