@@ -1,6 +1,6 @@
 Metadata-Version: 2.1
 Name: sfnx
-Version: 0.1.0
+Version: 0.1.1
 Classifier: Programming Language :: Python :: 3
 Classifier: Programming Language :: Python :: 3.7
 Classifier: Programming Language :: Python :: 3.8
@@ -18,3 +18,15 @@ Requires-Dist: sqlmodel
 
 # sfnx-terminal
 A minimal terminal password manager that uses Typer, SQLModel, Argon2 Key Derivation, AES and SQLite
+
+# Installation
+## Archlinux Install: 
+```sudo pacman -S pipx```
+```pipx install sfnx```
+
+# Documentation:
+Coming soon...
+
+# Usage Instructions:
+Coming soon...
+
