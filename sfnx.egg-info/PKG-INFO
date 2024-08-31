@@ -1,0 +1,20 @@
+Metadata-Version: 2.1
+Name: sfnx
+Version: 0.1.0
+Classifier: Programming Language :: Python :: 3
+Classifier: Programming Language :: Python :: 3.7
+Classifier: Programming Language :: Python :: 3.8
+Classifier: Programming Language :: Python :: 3.9
+Classifier: License :: OSI Approved :: MIT License
+Classifier: Operating System :: OS Independent
+Requires-Python: >=3.7
+Description-Content-Type: text/markdown
+License-File: LICENSE
+Requires-Dist: typer[all]
+Requires-Dist: rich
+Requires-Dist: cryptography
+Requires-Dist: argon2-cffi
+Requires-Dist: sqlmodel
+
+# sfnx-terminal
+A minimal terminal password manager that uses Typer, SQLModel, Argon2 Key Derivation, AES and SQLite

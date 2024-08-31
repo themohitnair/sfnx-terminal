@@ -1,0 +1,13 @@
+LICENSE
+README.md
+setup.py
+sfnx/__init__.py
+sfnx/db.py
+sfnx/main.py
+sfnx/security.py
+sfnx.egg-info/PKG-INFO
+sfnx.egg-info/SOURCES.txt
+sfnx.egg-info/dependency_links.txt
+sfnx.egg-info/entry_points.txt
+sfnx.egg-info/requires.txt
+sfnx.egg-info/top_level.txt

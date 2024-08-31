@@ -1,0 +1,5 @@
+typer[all]
+rich
+cryptography
+argon2-cffi
+sqlmodel
