@@ -1,6 +1,6 @@
 Metadata-Version: 2.1
 Name: sfnx
-Version: 0.1.5
+Version: 0.1.6
 Classifier: Programming Language :: Python :: 3
 Classifier: Programming Language :: Python :: 3.7
 Classifier: Programming Language :: Python :: 3.8
@@ -34,7 +34,7 @@ To install `sfnx-terminal`, use `pipx` to manage a global environment on your Li
 ```sh
 sudo pacman -S pipx
 pipx install sfnx
-pipx ensure path
+pipx ensurepath
 source ~/.bashrc
 ```
 

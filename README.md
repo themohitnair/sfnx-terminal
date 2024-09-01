@@ -15,7 +15,7 @@ To install `sfnx-terminal`, use `pipx` to manage a global environment on your Li
 ```sh
 sudo pacman -S pipx
 pipx install sfnx
-pipx ensure path
+pipx ensurepath
 source ~/.bashrc
 ```
 
