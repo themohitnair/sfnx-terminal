@@ -1,6 +1,7 @@
 from typer import Typer
 from rich.console import Console
 from rich.text import Text
+import pyperclip
 from rich.panel import Panel
 import getpass
 import os
@@ -79,7 +80,7 @@ def delpass():
         console.print(f"[bold red]Error:[/bold red] {e}", style="bold red")
 
 @app.command("viewpass")
-def viewpass():
+def copypass():
     try:
         if not check_db_exists():
             init()
@@ -87,7 +88,12 @@ def viewpass():
             service = input("Enter the name of the service: ")
             username = input("Enter the username used for the service: ")
             master_password_attempt = getpass.getpass("Enter your master password: ")
-            retrieve_password(master_password_attempt, service, username)
+            password = retrieve_password(master_password_attempt, service, username)
+            if password:
+                pyperclip.copy(password)
+                console.print("[bold green]Password copied to clipboard.[/bold green]", style="bold green")
+            else:
+                console.print("[bold red]Error:[/bold red] Password not found.", style="bold red")
     except Exception as e:
         console.print(f"[bold red]Error:[/bold red] {e}", style="bold red")
 

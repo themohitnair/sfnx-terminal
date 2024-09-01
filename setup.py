@@ -5,14 +5,15 @@ with open("README.md", "r", encoding="utf-8") as fh:
 
 setup(
     name="sfnx",
-    version="0.1.3",
+    version="0.1.4",
     packages=find_packages(),
     install_requires=[
         "typer[all]>=0.4,<1.0",
         "rich>=10.0,<13.0",
         "cryptography>=3.4,<41.0",
         "argon2-cffi>=20.1,<23.0",
-        "sqlmodel>=0.0.4,<0.1.0"
+        "sqlmodel>=0.0.4,<0.1.0",
+        "pyperclip>=1.9.0"
     ],
     entry_points={
         "console_scripts": [
@@ -30,5 +31,5 @@ setup(
     ],
     long_description=long_description,
     long_description_content_type="text/markdown",
-    include_package_data=True,  # Ensure non-Python files are included
+    include_package_data=True,
 )

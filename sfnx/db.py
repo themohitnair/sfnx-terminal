@@ -166,9 +166,8 @@ def retrieve_password(master_password_attempt: str, service: str, username: str)
                         except ValueError:
                             password = None
 
-                        print(f"Password: {password}")
-                    print("Password(s) retrieved successfully!")
+                        return password
                 else:
-                    print("No records found for this service.")
+                    return None
     except Exception as e:
         print(f"Error retrieving password: {e}")
