@@ -1,5 +1,6 @@
 from sqlmodel import SQLModel, create_engine, Session, select, Field, UniqueConstraint
 from sfnx.security import derive_key, encrypt, decrypt
+from sqlalchemy.sql import func
 from sqlmodel import SQLModel, Field
 from typing import Optional
 import os

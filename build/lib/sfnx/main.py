@@ -125,5 +125,27 @@ def copypass():
     except Exception as e:
         console.print(f"[bold red]Error:[/bold red] {e}", style="bold red")
 
+@app.command("afresh")
+def afresh():
+    """
+    Delete the sfnx.db file and reset the configuration.
+
+    This command will remove the sfnx.db file, effectively deleting all stored
+    passwords and configuration. This action is irreversible, so make sure
+    you really want to reset everything before running this command.
+    """
+    try:
+        if check_db_exists():
+            confirm = input("Are you sure you want to delete the sfnx.db file and reset all configurations? [y/N]: ").lower()
+            if confirm == 'y':
+                os.remove("sfnx.db")
+                console.print("[bold green]Database file deleted and configuration reset.[/bold green]", style="bold green")
+            else:
+                console.print("[bold yellow]Operation cancelled.[/bold yellow]", style="bold yellow")
+        else:
+            console.print("[bold red]Error:[/bold red] Database file does not exist.", style="bold red")
+    except Exception as e:
+        console.print(f"[bold red]Error:[/bold red] {e}", style="bold red")
+
 if __name__ == "__main__":
     app()

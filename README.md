@@ -76,7 +76,17 @@ pipx upgrade sfnx
    sfnx copypass
    ```
 
-5. **`--help`**:  
+5. **`afresh`**
+   - Deletes the password database from your system and hence your current configuration along with it
+   - In order to use the utility after this command, you must use `sfnx init` to reconfigure the command-line application
+   - The `afresh` command is irreversible. Proceed with caution when using the command
+
+   Example:
+   ```sh
+   sfnx afresh
+   ```
+
+6. **`--help`**:  
    - Displays help information for the commands.
 
    Example:
