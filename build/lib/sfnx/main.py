@@ -19,6 +19,13 @@ rules = [
 
 @app.command("init")
 def init():
+    """
+    Initialize the password manager and set up the master password.
+
+    This command will guide you through setting up your master password and configuring
+    your password manager. Ensure you remember your master password as it is crucial
+    for accessing your stored passwords.
+    """
     try:
         if not check_db_exists():
             rules_text = "\n".join([f"{rule} {point}" for rule, point in rules])
@@ -49,6 +56,13 @@ def init():
 
 @app.command("addpass")
 def addpass():
+    """
+    Add a new password entry for a service.
+
+    This command allows you to add a new password entry for a specific service
+    by providing the service name, username, and password. Make sure to enter
+    the password correctly and confirm it before saving.
+    """
     try:
         if not check_db_exists():
             init()
@@ -68,6 +82,13 @@ def addpass():
 
 @app.command("delpass")
 def delpass():
+    """
+    Delete a password entry for a service.
+
+    This command removes a stored password entry for a specific service based on
+    the provided service name and username. You will need to provide your master
+    password to confirm the deletion.
+    """
     try:
         if not check_db_exists():
             init()
@@ -79,8 +100,15 @@ def delpass():
     except Exception as e:
         console.print(f"[bold red]Error:[/bold red] {e}", style="bold red")
 
-@app.command("viewpass")
+@app.command("copypass")
 def copypass():
+    """
+    View and copy a password entry for a service.
+
+    This command retrieves and copies a password entry for a specific service
+    to the clipboard. You need to provide the service name, username, and your
+    master password. The password will be copied to the clipboard for your convenience.
+    """
     try:
         if not check_db_exists():
             init()
