@@ -9,6 +9,12 @@
 - **Simple Commands**: Easily initialize, add, delete, and view passwords from the terminal.
 
 ## Installation
+sfnx uses a copy-paste mechanism to be able to retrieve passwords from the local database. You must have one installed. One example of such a mechanism is xclip. 
+You can install it using the following command 
+
+```sh
+sudo pacman -S xclip
+```
 
 To install `sfnx-terminal`, use `pipx` to manage a global environment on your Linux machine:
 
@@ -104,7 +110,7 @@ pipx upgrade sfnx
 
 2. **Adding Passwords**: When adding a password with `sfnx addpass`, the password is encrypted with AES, using a key derived from the master password and a unique salt.
 
-3. **Retrieving Passwords**: With `sfnx viewpass`, the stored encrypted password is decrypted and displayed after verifying the master password.
+3. **Retrieving Passwords**: With `sfnx copypass`, the stored encrypted password is decrypted and copied to your clipboard after verifying the master password.
 
 4. **Deleting Passwords**: The `sfnx delpass` command removes the password entry corresponding to the service and username, provided the correct master password is entered.
 
