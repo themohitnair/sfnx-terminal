@@ -116,6 +116,8 @@ pipx upgrade sfnx
 
 ### Workflow
 
+![](exp/workflow.png)
+
 1. **Initialization**: On running `sfnx init`, the database is created and configured with the master password and verification secret. This configuration is stored securely using encryption.
 
 2. **Adding Passwords**: When adding a password with `sfnx addpass`, the password is encrypted with AES, using a key derived from the master password and a unique salt.
