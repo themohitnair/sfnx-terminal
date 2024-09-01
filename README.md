@@ -19,6 +19,14 @@ pipx ensurepath
 source ~/.bashrc
 ```
 
+## For existing users
+
+If you encounter any bugs, please make sure to update the `sfnx` package using pipx
+
+```sh
+pipx upgrade sfnx
+```
+
 ## Usage
 
 ### Commands
