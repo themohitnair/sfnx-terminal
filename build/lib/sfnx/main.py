@@ -103,7 +103,7 @@ def delpass():
 @app.command("copypass")
 def copypass():
     """
-    View and copy a password entry for a service.
+    Copy a password entry for a service.
 
     This command retrieves and copies a password entry for a specific service
     to the clipboard. You need to provide the service name, username, and your

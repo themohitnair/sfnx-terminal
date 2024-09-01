@@ -61,13 +61,13 @@ pipx upgrade sfnx
    sfnx delpass
    ```
 
-4. **`viewpass`**:  
+4. **`copypass`**:  
    - Retrieves and decrypts passwords for a specified service and username.
    - Displays the decrypted password in the terminal.
 
    Example:
    ```sh
-   sfnx viewpass
+   sfnx copypass
    ```
 
 5. **`--help`**:  
