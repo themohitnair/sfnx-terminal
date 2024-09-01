@@ -1,6 +1,6 @@
 Metadata-Version: 2.1
 Name: sfnx
-Version: 0.1.3
+Version: 0.1.4
 Classifier: Programming Language :: Python :: 3
 Classifier: Programming Language :: Python :: 3.7
 Classifier: Programming Language :: Python :: 3.8
@@ -15,6 +15,7 @@ Requires-Dist: rich<13.0,>=10.0
 Requires-Dist: cryptography<41.0,>=3.4
 Requires-Dist: argon2-cffi<23.0,>=20.1
 Requires-Dist: sqlmodel<0.1.0,>=0.0.4
+Requires-Dist: pyperclip>=1.9.0
 
 # sfnx
 
