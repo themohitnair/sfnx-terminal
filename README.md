@@ -86,7 +86,15 @@ pipx upgrade sfnx
    sfnx afresh
    ```
 
-6. **`--help`**:  
+8. **`modpass`**
+   - Updates the username/password attributes (and hence the stored salt) according to the user's choice.
+   
+   Example:
+   ```sh
+   sfnx modpass
+   ```
+
+7. **`--help`**:  
    - Displays help information for the commands.
 
    Example:

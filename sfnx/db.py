@@ -56,6 +56,29 @@ def check_db_exists():
     db_path = "sfnx.db"
     return os.path.isfile(db_path)
 
+def update_entry(master_password_attempt: str, service: str, username: str, new_username: Optional[str], new_password: Optional[str]):
+    try:
+        if verify_user_master_password(master_password_attempt) and not service == "sfnx_secret":
+            with Session(engine) as session:
+                statement = select(Secrets).where(Secrets.service == service).where(Secrets.username == username)
+                result = session.exec(statement).first()
+                if result:
+                    if new_username:
+                        result.username = new_username
+                    if new_password:
+                        salt = os.urandom(16)
+                        key = derive_key(master_password_attempt, salt)
+                        result.password = encrypt(key, new_password)
+                        result.salt = salt
+                    session.commit()
+                    print("Entry updated successfully.")
+                    return
+                else:
+                    print("Service not found. You have no such entry.")
+                    return
+    except Exception as e:
+        print(f"Error updating password: {e}")
+
 def verify_user_master_password(master_password_attempt: str) -> bool:
     try:
         with Session(engine) as session:

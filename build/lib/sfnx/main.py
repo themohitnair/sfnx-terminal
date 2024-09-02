@@ -5,7 +5,7 @@ import pyperclip
 from rich.panel import Panel
 import getpass
 import os
-from sfnx.db import init_db, verify_user_master_password, check_db_exists, configure, get_user_name, add_password, retrieve_password, delete_password
+from sfnx.db import init_db, verify_user_master_password, check_db_exists, configure, get_user_name, add_password, retrieve_password, delete_password, update_entry
 from sfnx.security import encrypt, decrypt, derive_key
 
 app = Typer()
@@ -146,6 +146,29 @@ def afresh():
             console.print("[bold red]Error:[/bold red] Database file does not exist.", style="bold red")
     except Exception as e:
         console.print(f"[bold red]Error:[/bold red] {e}", style="bold red")
+
+@app.command("modpass")
+def modpass():
+    """
+    Update a password/username entry for a service.
+
+    This command retrieves and updates a password/username entry for a specific service
+    to the clipboard. You need to provide the service name, username, and your
+    master password, along with the new password (optional) or the new username (optional).
+    """
+    try:
+        if not check_db_exists():
+            init()
+        else:
+            service = input("Enter the name of the service: ")
+            username = input("Enter the username used for the service: ")
+            master_password_attempt = getpass.getpass("Enter your master password: ")
+            new_username = input("Enter the new username [Just press enter if you do not wish to change this]: ")
+            new_password = input("Enter the new password [Just press enter if you do not wish to change this]: ")
+            update_entry(master_password_attempt, service, username, new_username, new_password)
+    except Exception as e:
+        console.print(f"[bold red]Error:[/bold red] {e}", style="bold red")
+
 
 if __name__ == "__main__":
     app()
