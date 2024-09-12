@@ -110,8 +110,10 @@
 
 4. **Deleting Passwords**: The `sfnx delpass` command removes the password entry corresponding to the service and username, provided the correct master password is entered.
 
+5. **Updating Passwords**: The `sfnx modpass` command updates the password entry corresponding to the service and username, provided the correct master password is entered.
+
 ## Repository
 
-For more details, check out the [GitHub repository](https://github.com/themohitnair/sfnxterm).
+For more details, check out the [GitHub repository](https://github.com/themohitnair/sfnx).
 
-- [LICENSE](https://github.com/themohitnair/sfnxterm/blob/main/LICENSE)
+- [LICENSE](https://github.com/themohitnair/sfnx/blob/main/LICENSE)
