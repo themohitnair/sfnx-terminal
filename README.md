@@ -1,6 +1,6 @@
 # sfnx
 
-`sfnxterm` or `sfnx` is a minimal terminal-based password manager built using Python. It leverages the `Typer` CLI framework, `SQLModel` for database management, `Argon2` for key derivation, `AES` for encryption, and `SQLite` for storage.
+`sfnx` is a minimal terminal-based password manager built using Python. It leverages the `Typer` CLI framework, `SQLModel` for database management, `Argon2` for key derivation, `AES` for encryption, and `SQLite` for storage.
 
 ## Features
 
@@ -9,29 +9,7 @@
 - **Simple Commands**: Easily initialize, add, delete, and view passwords from the terminal.
 
 ## Installation
-sfnx uses a copy-paste mechanism to be able to retrieve passwords from the local database. You must have one installed. One example of such a mechanism is xclip. 
-You can install it using the following command 
-
-```sh
-sudo pacman -S xclip
-```
-
-To install `sfnx-terminal`, use `pipx` to manage a global environment on your Linux machine:
-
-```sh
-sudo pacman -S pipx
-pipx install sfnx
-pipx ensurepath
-source ~/.bashrc
-```
-
-## For existing users
-
-If you encounter any bugs, please make sure to update the `sfnx` package using pipx
-
-```sh
-pipx upgrade sfnx
-```
+(To be added)
 
 ## Usage
 
@@ -137,5 +115,3 @@ pipx upgrade sfnx
 For more details, check out the [GitHub repository](https://github.com/themohitnair/sfnxterm).
 
 - [LICENSE](https://github.com/themohitnair/sfnxterm/blob/main/LICENSE)
-
-- [PyPI registry](https://pypi.org/project/sfnx/)
