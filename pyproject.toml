@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "sfnx"
-version = "0.1.0"
+version = "0.0.1"
 description = "`sfnx` is a minimal terminal-based password manager."
 authors = ["Mohit <themohitnair@protonmail.com>"]
 license = "MIT"
