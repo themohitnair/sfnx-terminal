@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "sfnx"
-version = "0.0.1"
+version = "0.0.2"
 description = "`sfnx` is a minimal terminal-based password manager."
 authors = ["Mohit <themohitnair@protonmail.com>"]
 license = "MIT"
@@ -21,4 +21,4 @@ requires = ["poetry-core"]
 build-backend = "poetry.core.masonry.api"
 
 [tool.poetry.scripts]
-sfnx = "sfnx.main:app"
+sfnx = "sfnx.__main__:app"
