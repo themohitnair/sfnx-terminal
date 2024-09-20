@@ -168,7 +168,3 @@ def modpass():
             update_entry(master_password_attempt, service, username, new_username, new_password)
     except Exception as e:
         console.print(f"[bold red]Error:[/bold red] {e}", style="bold red")
-
-
-if __name__ == "__main__":
-    app()
