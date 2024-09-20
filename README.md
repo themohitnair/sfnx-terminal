@@ -9,7 +9,12 @@
 - **Simple Commands**: Easily initialize, add, delete, and view passwords from the terminal.
 
 ## Installation
-(To be added)
+### Arch Linux Install
+   ```sh
+   yay -Ss sfnx
+   ```
+
+   Obviously, other package managers such as aura, trizen, and paru can be used.
 
 ## Usage
 
