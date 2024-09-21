@@ -195,3 +195,14 @@ def retrieve_password(master_password_attempt: str, service: str, username: str)
                     return None
     except Exception as e:
         print(f"Error retrieving password: {e}")
+
+def retrieve_all_services_and_usernames() -> list:
+    try:
+        with Session(engine) as session:
+            statement = select(Secrets.service, Secrets.username).where(Secrets.service != "sfnx_secret")
+            results = session.exec(statement).all()
+            
+            return [(service, username) for service, username in results]
+    except Exception as e:
+        print(f"Error retrieving all services and usernames: {e}")
+        return []

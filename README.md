@@ -69,7 +69,7 @@
    sfnx afresh
    ```
 
-8. **`modpass`**
+6. **`modpass`**
    - Updates the username/password attributes (and hence the stored salt) according to the user's choice.
    
    Example:
@@ -77,7 +77,15 @@
    sfnx modpass
    ```
 
-7. **`--help`**:  
+7. **`services`**
+   - Shows services along with usernames stored in the database.
+
+   Examples:
+   ```sh
+   sfnx services
+   ```
+
+8. **`--help`**:  
    - Displays help information for the commands.
 
    Example:
@@ -116,6 +124,8 @@
 4. **Deleting Passwords**: The `sfnx delpass` command removes the password entry corresponding to the service and username, provided the correct master password is entered.
 
 5. **Updating Passwords**: The `sfnx modpass` command updates the password entry corresponding to the service and username, provided the correct master password is entered.
+
+6. **Viewing added entries**: For convenience, the `sfnx services` command shows all the services and list of usernames for each service (not the passwords), so that the user can view the passwords that they entered and proceed with other entries without being confused about the ones already added.
 
 ## Repository
 

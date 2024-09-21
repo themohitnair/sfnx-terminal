@@ -1,37 +1,13 @@
 pkgname=sfnx
-pkgver=0.0.2
-pkgrel=2
+pkgver=0.0.4
+pkgrel=1
 pkgdesc="A minimal terminal-based password manager"
 arch=('x86_64')
 url="https://github.com/themohitnair/sfnx"
 license=('MIT')
-depends=('python' 'python-cryptography' 'python-sqlmodel' 'python-typer' 'python-rich' 'python-pyperclip' 'python-argon2-cffi')
-makedepends=('python-pip' 'python-build' 'python-installer' 'python-wheel')
-source=("git+https://github.com/themohitnair/sfnx.git")
-sha256sums=('SKIP')
-
-pkgver() {
-    cd "$srcdir/$pkgname"
-    echo $(grep '^version =' pyproject.toml | cut -d'"' -f2)
-}
-
-build() {
-    cd "$srcdir/$pkgname"
-    python -m build --wheel --no-isolation
-}
+source=("sfnx-${pkgver}.tar.gz::https://github.com/themohitnair/sfnx/releases/download/v${pkgver}/sfnx-${pkgver}-linux-x86_64.tar.gz")
+sha256sums=("ba7ed00aa7d506ac44baac3c4214e60a39fd94ee8da75ba564a75d8ee661c275")
 
 package() {
-    cd "$srcdir/$pkgname"
-    python -m venv --system-site-packages "$pkgdir/opt/$pkgname"
-    "$pkgdir/opt/$pkgname/bin/pip" install --no-deps dist/*.whl
-
-    # Create the executable script
-    install -Dm755 /dev/null "$pkgdir/usr/bin/$pkgname"
-    cat > "$pkgdir/usr/bin/$pkgname" << EOF
-#!/bin/sh
-exec /opt/$pkgname/bin/python -m sfnx "\$@"
-EOF
-
-    # Install license
-    install -Dm644 LICENSE "$pkgdir/usr/share/licenses/$pkgname/LICENSE"
+    install -Dm755 "$srcdir/sfnx" "$pkgdir/usr/bin/sfnx"
 }

@@ -5,7 +5,7 @@ import pyperclip
 from rich.panel import Panel
 import getpass
 import os
-from sfnx.db import init_db, verify_user_master_password, check_db_exists, configure, get_user_name, add_password, retrieve_password, delete_password, update_entry
+from sfnx.db import init_db, verify_user_master_password, check_db_exists, configure, get_user_name, add_password, retrieve_password, delete_password, update_entry, retrieve_all_services_and_usernames
 from sfnx.security import encrypt, decrypt, derive_key
 
 app = Typer()
@@ -128,7 +128,7 @@ def copypass():
 @app.command("afresh")
 def afresh():
     """
-    Delete the sfnx.db file and reset the configuration.
+    Resets the configuration.
 
     This command will remove the sfnx.db file, effectively deleting all stored
     passwords and configuration. This action is irreversible, so make sure
@@ -166,5 +166,43 @@ def modpass():
             new_username = input("Enter the new username [Just press enter if you do not wish to change this]: ")
             new_password = input("Enter the new password [Just press enter if you do not wish to change this]: ")
             update_entry(master_password_attempt, service, username, new_username, new_password)
+    except Exception as e:
+        console.print(f"[bold red]Error:[/bold red] {e}", style="bold red")
+
+@app.command("services")
+def services():
+    """
+    Display all stored services and their corresponding usernames.
+    
+    This command retrieves and shows all the services and their usernames stored
+    in the password manager, excluding the internal 'sfnx_secret' service.
+    Multiple entries for the same service with different usernames are supported.
+    """
+    try:
+        if not check_db_exists():
+            console.print("[bold yellow]No database found. Please initialize the password manager first.[/bold yellow]")
+            return
+
+        master_password_attempt = getpass.getpass("Enter your master password: ")
+        if verify_user_master_password(master_password_attempt):
+            services_list = retrieve_all_services_and_usernames()
+            if services_list:
+                console.print("[bold green]Stored services and usernames:[/bold green]")
+                service_groups = {}
+                for service, username in services_list:
+                    if service not in service_groups:
+                        service_groups[service] = []
+                    service_groups[service].append(username)
+                
+                # Display grouped entries
+                for service, usernames in service_groups.items():
+                    console.print(f"[cyan]Service:[/cyan] {service}")
+                    for username in usernames:
+                        console.print(f"  [cyan]Username:[/cyan] {username}")
+                    console.print("")
+            else:
+                console.print("[yellow]No services stored yet.[/yellow]")
+        else:
+            console.print("[bold red]Invalid master password.[/bold red]")
     except Exception as e:
         console.print(f"[bold red]Error:[/bold red] {e}", style="bold red")
